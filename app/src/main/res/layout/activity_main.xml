@@ -9,7 +9,8 @@
         android:id="@+id/btnGetRegId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Get RegId"/>
+        android:text="Registrar no GCM"
+        android:layout_gravity="center_horizontal" />
 
     <EditText
         android:id="@+id/etRegId"

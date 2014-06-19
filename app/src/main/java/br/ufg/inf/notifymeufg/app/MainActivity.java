@@ -1,7 +1,9 @@
 package br.ufg.inf.notifymeufg.app;
 
 import java.io.IOException;
+
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -16,8 +18,8 @@ public class MainActivity extends Activity implements OnClickListener {
     Button btnRegId;
     EditText etRegId;
     GoogleCloudMessaging gcm;
-    String regid;
-    String PROJECT_NUMBER = "129801525900";
+    String regId;
+    String ID_PROJETO = "129801525900";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,23 +31,24 @@ public class MainActivity extends Activity implements OnClickListener {
 
         btnRegId.setOnClickListener(this);
     }
-    public void getRegId(){
+
+    public void RegistraAparelho(){
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
                 String msg = "";
                 try {
-                    if (gcm == null) {
-                        gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
+                        if (gcm == null) {
+                            gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
+                        }
+                        regId = gcm.register(ID_PROJETO);
+                        msg = "Dispositivo Registrado. Sua Identificação:\n\n " + regId;
+                        Log.i("GCM",  msg);
+
+                    } catch (IOException ex) {
+                        msg = "Erro :" + ex.getMessage();
                     }
-                    regid = gcm.register(PROJECT_NUMBER);
-                    msg = "Device registered, registration ID = " + regid + "__END";
-                    Log.i("GCM",  msg);
 
-                } catch (IOException ex) {
-                    msg = "Error :" + ex.getMessage();
-
-                }
                 return msg;
             }
 
@@ -55,7 +58,33 @@ public class MainActivity extends Activity implements OnClickListener {
             }
         }.execute(null, null, null);
     }
+
     @Override
     public void onClick(View v) {
-        getRegId();
-    } }
+        RegistraAparelho();
+    }
+
+    /*
+    // Envia para o servidor HTTP
+    public void sendIdToServer() {
+        URI url = null;
+
+        try {
+            url = new URI("http://10.0.2.2/gcm/gcm_register.php?regId=" + regId);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpGet request = new HttpGet();
+        request.setURI(url);
+        try {
+            httpClient.execute(request);
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    */
+}

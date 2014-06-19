@@ -1,3 +1,7 @@
+/**
+ * GcmBroadcastReceiver recebe comunicação do GCM para o repasse da notificação
+ */
+
 package br.ufg.inf.notifymeufg.app;
 
 import android.app.Activity;
@@ -11,11 +15,11 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        // Explicitly specify that GcmMessageHandler will handle the intent.
+        // Notifica o GcmMensageiro do recebimento de uma notificação
         ComponentName comp = new ComponentName(context.getPackageName(),
-                GcmMessageHandler.class.getName());
+                GcmMensageiro.class.getName());
 
-        // Start the service, keeping the device awake while it is launching.
+        // Mantém o aparelho ativo para o recebimento da notificação
         startWakefulService(context, (intent.setComponent(comp)));
         setResultCode(Activity.RESULT_OK);
     }
